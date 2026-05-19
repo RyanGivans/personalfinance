@@ -7,9 +7,13 @@ import { formatCurrency, YEAR_DATA } from "@/lib/financialData";
 import {
   BarChart3,
   BookOpen,
+  ClipboardList,
   DollarSign,
   GraduationCap,
   LayoutDashboard,
+  MapPin,
+  Sliders,
+  Target,
   TrendingUp,
   Wallet,
 } from "lucide-react";
@@ -29,6 +33,14 @@ const NAV_ITEMS = [
   { id: "2031", label: "2031", icon: GraduationCap, sub: "Raven: RN Yr 2", school: true },
   { id: "netpay", label: "Pay Rates", icon: DollarSign },
   { id: "expenses", label: "Expense Detail", icon: Wallet },
+];
+
+const PLANNING_ITEMS = [
+  { id: "actual", label: "Actual Tracker", icon: ClipboardList, sub: "Enter real monthly data" },
+  { id: "whatif", label: "What-If Calculator", icon: Sliders, sub: "Scenario planning" },
+  { id: "goals", label: "Goal Tracker", icon: Target, sub: "Savings targets" },
+  { id: "postschool", label: "2032+ Projection", icon: GraduationCap, sub: "After Raven's degree" },
+  { id: "milestones", label: "Milestones", icon: MapPin, sub: "Key events timeline" },
 ];
 
 export default function Sidebar({ activeSection, onNavigate }: SidebarProps) {
@@ -139,6 +151,59 @@ export default function Sidebar({ activeSection, onNavigate }: SidebarProps) {
                     if (!isActive) {
                       (e.currentTarget as HTMLButtonElement).style.background = "transparent";
                       (e.currentTarget as HTMLButtonElement).style.color = item.school ? "oklch(0.72 0.06 65)" : "oklch(0.65 0.005 240)";
+                    }
+                  }}
+                >
+                  <Icon size={15} style={{ flexShrink: 0 }} />
+                  <div className="flex-1 min-w-0">
+                    <div>{item.label}</div>
+                    {item.sub && (
+                      <div className="text-xs mt-0.5" style={{ color: "oklch(0.5 0.005 240)", fontWeight: 400 }}>
+                        {item.sub}
+                      </div>
+                    )}
+                  </div>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+
+        <p className="text-xs font-medium mt-5 mb-2 px-2 uppercase tracking-wider" style={{ color: "oklch(0.45 0.005 240)" }}>
+          Planning Tools
+        </p>
+        <ul className="space-y-0.5">
+          {PLANNING_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeSection === item.id;
+            return (
+              <li key={item.id}>
+                <button
+                  onClick={() => onNavigate(item.id)}
+                  className="w-full text-left"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "8px 12px",
+                    borderRadius: "6px",
+                    fontSize: "13px",
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? "oklch(0.98 0 0)" : "oklch(0.65 0.005 240)",
+                    background: isActive ? "oklch(0.22 0.02 240)" : "transparent",
+                    borderLeft: isActive ? "2px solid oklch(0.72 0.15 65)" : "2px solid transparent",
+                    transition: "all 150ms ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.18 0.015 240)";
+                      (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.9 0 0)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+                      (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.65 0.005 240)";
                     }
                   }}
                 >
