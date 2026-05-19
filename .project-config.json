@@ -1,0 +1,35 @@
+{
+  "build_command": "pnpm run build",
+  "capabilities": [],
+  "dev_command": "pnpm run dev",
+  "env_vars": {},
+  "experiments": null,
+  "git_remote": {
+    "repo_url": "s3://vida-prod-gitrepo/webdev-git/310519663240782224/QoGruJt7NQEwsCD9U7La9Q",
+    "access_key_id": "ASIAZV3A2ECZCG6ZGPGH",
+    "secret_access_key": "860Z577aOmuWc8AKGvZj/Z2gTZ2uwSJ+3xp2Jvwe",
+    "session_token": "IQoJb3JpZ2luX2VjEBMaCXVzLWVhc3QtMSJGMEQCIF2qHphE5wyagb95HZjz/NIpyK+JIO/JWaA+Kc1x0qQsAiBubep8K1Y8DbJTSVyKLVy3CIiR1jwtJdLyeToQad6ZjCr/Awjb//////////8BEAQaDDY2NTM4NjA5ODg2NiIMSpe/lKuVil3MjJ4DKtMDFY6FJ6sfh2aAXNwevaTtC2NvgM5PFK9w0bzx5ca059ZZUWHIg0BwUR8bWW+7k+T9KQCvw21mwJJKR1iZMykDaIZn6ljnYnipG77BDtmRT0mvM4ChIJARR3L6V42Tmd+jvccoGToI1Eg9Z6WH7F748HYSKlZhXJkuv5gmhSpudREU1HGjqHCrvR5aNVwG7n8JLRxDbqrqk3iMVctkbF5OG1CPSmLSVsT4hhJPCM94mOgo+ZhM5riFpKiSiyiiHV44rI0mOajEP3hddXiDkTh3e3vHEqhy+KMIF8BzNPMlwZ6tIFFoxcSeBMYEPpagHs/N8YCr+3lki8MaNckKHk1Hv6/F6YsCBiPkRdQ0Ue+OX6iAeUBLdSXFsB0koNzJOgEr1hphiKPStxM4Z5sGtxD/OzPx+MbNHzNQtCer6vjPCg5ZlgAnhqg5fK9Vd4atwuR8wgDKUz36mqbBGKNwvHWUcxkggE5s5wiaFGDLQYCyOgLATkDk/8SLG2NkDkbtgyyi0hoYeDo2CymXNxXkKBY4vauwVKahexAzc9HJf1p8H+4mr41liofgQOVOYfENGQXvcW3CBgejEjFxFshN4vJ56n/hGoczfp4yJVmnWiP/TO7zb2EwltCy0AY6ngHUZLw1d1fzqB7M9K1V0Yo4SSRZyRTYlk/nNdtjoRSJaQbvEl7m6ypWf2s7sg7FW6KH7nUYdSpWd5hnWpmf1NbIP+jttdbe/FjVngsnV4sQm3AfD3tr8VOoB1AS2zlyQYxUxBnwO7HDntNyCqG8pFg9ZNFLe8bgUuuAHL8C6sh41EYFqGo1iP8vD9qN18WFP3YSHfTJAeL4mEUuyCd86A==",
+    "expiration": "2026-05-20T06:12:38.000Z"
+  },
+  "name": "financial-dashboard",
+  "path": "/home/ubuntu/financial-dashboard",
+  "port": 3000,
+  "secrets": {
+    "BUILT_IN_FORGE_API_KEY": "HE6BqsoSWEMjr9eJoqnjzk",
+    "BUILT_IN_FORGE_API_URL": "https://forge.manus.ai",
+    "JWT_SECRET": "LJnj7y2hPhH9q7kcKd2APq",
+    "OAUTH_SERVER_URL": "https://api.manus.im",
+    "OWNER_NAME": "Ryan Givans",
+    "OWNER_OPEN_ID": "BC3ydjmrCmjzuSAokVa7Cs",
+    "VITE_ANALYTICS_ENDPOINT": "https://manus-analytics.com",
+    "VITE_ANALYTICS_WEBSITE_ID": "35db6835-2de8-4589-ab41-d25f118e1918",
+    "VITE_APP_ID": "QoGruJt7NQEwsCD9U7La9Q",
+    "VITE_APP_LOGO": "",
+    "VITE_APP_TITLE": "Ryan \u0026 Raven — Financial Dashboard",
+    "VITE_FRONTEND_FORGE_API_KEY": "dS5uwgJtTaXb7kSqKMtHXR",
+    "VITE_FRONTEND_FORGE_API_URL": "https://forge.manus.ai",
+    "VITE_OAUTH_PORTAL_URL": "https://manus.im"
+  },
+  "template_id": "web-static",
+  "test_command": "pnpm test"
+}
