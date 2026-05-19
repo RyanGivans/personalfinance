@@ -149,7 +149,9 @@ export default function WhatIfSection() {
         </div>
         <input type="range" min={min} max={max} step={step} value={val}
           onChange={(e) => setVal(activeYear, field, Number(e.target.value))}
-          className="w-full h-1.5 rounded-full appearance-none cursor-pointer" style={{ accentColor: indigo }} />
+          onInput={(e) => setVal(activeYear, field, Number((e.target as HTMLInputElement).value))}
+          className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+          style={{ accentColor: indigo, touchAction: "none" }} />
         <div className="flex justify-between text-xs mt-0.5" style={{ color: "oklch(0.65 0.005 240)" }}>
           <span>{fmt(min)}</span><span>{fmt(max)}</span>
         </div>
