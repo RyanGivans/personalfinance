@@ -2,6 +2,16 @@
  * Blueprint Financial Dashboard — Data Layer
  * Design: Clean Technical Dashboard (Space Grotesk + DM Sans)
  * Colors: teal=income, rose=expenses, indigo=savings, amber=school years
+ *
+ * Ryan pay:
+ *   2026: $20/hr, 40 hrs/wk
+ *   2027: $24/hr, 40 hrs/wk
+ *   2028-2029: $75,000/yr salary
+ *   2030-2031: $84,000/yr salary
+ * Raven pay:
+ *   2026: $18/hr, 40 hrs/wk
+ *   2027: $22/hr, 40 hrs/wk
+ *   2028-2031: $0 (in school — LPN then RN)
  */
 
 export const TAX_RATE = 0.22;
@@ -10,18 +20,38 @@ export const HRS_YR = HRS_WK * 52;
 export const HRS_MO = HRS_YR / 12;
 
 export const STARTING_SAVINGS = 12500;
+export const ACTUAL_STORAGE_KEY = "ryan_raven_actuals";
 
-// Hourly rates by year (user-confirmed)
-export const RYAN_RATE: Record<number, number> = {
-  2026: 19,
-  2027: 24,
-  2028: 26,
-  2029: 28,
-  2030: 30,
-  2031: 32,
+// Ryan pay config per year
+export interface RyanPayConfig {
+  type: "hourly" | "salary";
+  hourlyRate?: number;   // for hourly years
+  annualGross?: number;  // for salary years
+  annualNet: number;
+  monthlyNet: number;
+}
+
+function ryanHourlyConfig(rate: number): RyanPayConfig {
+  const annualGross = rate * HRS_YR;
+  const annualNet = annualGross * (1 - TAX_RATE);
+  return { type: "hourly", hourlyRate: rate, annualGross, annualNet, monthlyNet: annualNet / 12 };
+}
+
+function ryanSalaryConfig(annualGross: number): RyanPayConfig {
+  const annualNet = annualGross * (1 - TAX_RATE);
+  return { type: "salary", annualGross, annualNet, monthlyNet: annualNet / 12 };
+}
+
+export const RYAN_PAY: Record<number, RyanPayConfig> = {
+  2026: ryanHourlyConfig(20),
+  2027: ryanHourlyConfig(24),
+  2028: ryanSalaryConfig(75000),
+  2029: ryanSalaryConfig(75000),
+  2030: ryanSalaryConfig(84000),
+  2031: ryanSalaryConfig(84000),
 };
 
-// Raven: works 2026-2027, school 2028-2031
+// Raven hourly rates (0 = in school)
 export const RAVEN_RATE: Record<number, number> = {
   2026: 18,
   2027: 22,
@@ -75,14 +105,10 @@ export const MONTHS_SHORT = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
-export function netMonthly(hourly: number): number {
-  if (hourly === 0) return 0;
-  const gross = HRS_MO * hourly;
-  return gross * (1 - TAX_RATE);
-}
-
-export function grossMonthly(hourly: number): number {
-  return HRS_MO * hourly;
+export function ravenNetMonthly(year: number): number {
+  const rate = RAVEN_RATE[year];
+  if (!rate) return 0;
+  return HRS_MO * rate * (1 - TAX_RATE);
 }
 
 export interface MonthData {
@@ -112,7 +138,7 @@ export interface YearData {
   ryanAnnualNet: number;
   ravenAnnualNet: number;
   bizAnnualNet: number;
-  ryanHourlyRate: number;
+  ryanPayConfig: RyanPayConfig;
   ravenHourlyRate: number;
   ravenInSchool: boolean;
   numMonths: number;
@@ -127,10 +153,10 @@ function buildAllData(): { years: YearData[]; allMonths: MonthData[] } {
     const startMonthIdx = year === 2026 ? 6 : 0; // July=6 for 2026
     const months: MonthData[] = [];
     const ravenInSchool = RAVEN_RATE[year] === 0;
-    const ryanNet = netMonthly(RYAN_RATE[year]);
-    const ravenNet = netMonthly(RAVEN_RATE[year]);
+    const ryanMonthlyNet = RYAN_PAY[year].monthlyNet;
+    const ravenMonthlyNet = ravenNetMonthly(year);
     const biz = BIZ_INCOME[year];
-    const totalMonthInc = ryanNet + ravenNet + biz;
+    const totalMonthInc = ryanMonthlyNet + ravenMonthlyNet + biz;
     const exp = EXPENSES[year];
     const totalMonthExp = Object.values(exp).reduce((a, b) => a + b, 0);
     const monthNet = totalMonthInc - totalMonthExp;
@@ -138,15 +164,14 @@ function buildAllData(): { years: YearData[]; allMonths: MonthData[] } {
     const startSavings = runningBalance;
 
     for (let mi = startMonthIdx; mi < 12; mi++) {
-      const prevBalance = runningBalance;
       runningBalance += monthNet;
 
       const md: MonthData = {
         year,
         month: MONTHS_ALL[mi],
         monthIndex: mi,
-        ryanNet,
-        ravenNet,
+        ryanNet: ryanMonthlyNet,
+        ravenNet: ravenMonthlyNet,
         bizIncome: biz,
         totalIncome: totalMonthInc,
         expenses: { ...exp },
@@ -176,10 +201,10 @@ function buildAllData(): { years: YearData[]; allMonths: MonthData[] } {
       netSavings: yearInc - yearExp,
       startSavings,
       endSavings: runningBalance,
-      ryanAnnualNet: ryanNet * numMonths,
-      ravenAnnualNet: ravenNet * numMonths,
+      ryanAnnualNet: ryanMonthlyNet * numMonths,
+      ravenAnnualNet: ravenMonthlyNet * numMonths,
       bizAnnualNet: biz * numMonths,
-      ryanHourlyRate: RYAN_RATE[year],
+      ryanPayConfig: RYAN_PAY[year],
       ravenHourlyRate: RAVEN_RATE[year],
       ravenInSchool,
       numMonths,
@@ -211,7 +236,7 @@ export function formatNumber(val: number): string {
   return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(val);
 }
 
-// Expense category colors for charts
+// Expense category colors for charts (used in charts and tracker)
 export const CAT_COLORS: Record<ExpenseCat, string> = {
   Rent: "#6366F1",
   Utilities: "#8B5CF6",
