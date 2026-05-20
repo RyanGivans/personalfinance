@@ -7,7 +7,6 @@ import {
   BIZ_INCOME,
   EXPENSES,
   RAVEN_RATE,
-  RYAN_RATE,
   STARTING_SAVINGS,
   YEAR_DATA,
   formatCurrency,
@@ -41,8 +40,10 @@ interface YearOverrides {
 
 function defaultOverrides(year: number): YearOverrides {
   const exp = EXPENSES[year];
+  const yd = YEAR_DATA.find(y => y.year === year)!;
+  const ryanRate = yd.ryanPayConfig.type === "hourly" ? yd.ryanPayConfig.hourlyRate! : 0;
   return {
-    ryanRate: RYAN_RATE[year],
+    ryanRate,
     ravenRate: RAVEN_RATE[year],
     bizIncome: BIZ_INCOME[year],
     rent: exp.Rent,

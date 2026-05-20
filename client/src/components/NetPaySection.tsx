@@ -11,7 +11,7 @@ import {
   HRS_YR,
   netMonthly,
   RAVEN_RATE,
-  RYAN_RATE,
+  RYAN_PAY,
   TAX_RATE,
 } from "@/lib/financialData";
 import { GraduationCap } from "lucide-react";
@@ -69,13 +69,14 @@ export default function NetPaySection() {
             </thead>
             <tbody>
               {YEARS.map((year, i) => {
-                const rate = RYAN_RATE[year];
-                const wkGross = HRS_WK * rate;
+                const cfg = RYAN_PAY[year];
+                const rate = cfg.type === "hourly" ? cfg.hourlyRate! : cfg.annualGross! / (52 * 40);
+                const wkGross = cfg.type === "hourly" ? HRS_WK * cfg.hourlyRate! : cfg.annualGross! / 52;
                 const wkNet = wkGross * (1 - TAX_RATE);
-                const moGross = grossMonthly(rate);
-                const moNet = netMonthly(rate);
-                const yrGross = HRS_YR * rate;
-                const yrNet = yrGross * (1 - TAX_RATE);
+                const moGross = cfg.annualGross! / 12;
+                const moNet = cfg.monthlyNet;
+                const yrGross = cfg.annualGross!;
+                const yrNet = cfg.annualNet;
                 return (
                   <tr
                     key={year}
@@ -86,7 +87,7 @@ export default function NetPaySection() {
                     }}
                   >
                     <td className="px-4 py-2.5 font-semibold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{year}</td>
-                    <td className="px-4 py-2.5 font-bold number-display" style={{ color: "var(--income)" }}>${rate}/hr</td>
+                    <td className="px-4 py-2.5 font-bold number-display" style={{ color: "var(--income)" }}>{cfg.type === "hourly" ? `$${cfg.hourlyRate}/hr` : `$${cfg.annualGross}/yr`}</td>
                     <td className="px-4 py-2.5 number-display">{formatCurrency(wkGross)}</td>
                     <td className="px-4 py-2.5 number-display positive">{formatCurrency(wkNet)}</td>
                     <td className="px-4 py-2.5 number-display">{formatCurrency(moGross)}</td>

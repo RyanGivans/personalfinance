@@ -1,4 +1,4 @@
-import { RYAN_RATE, YEAR_DATA, formatCurrency, netMonthly } from "@/lib/financialData";
+import { YEAR_DATA, formatCurrency } from "@/lib/financialData";
 import { GraduationCap } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -29,7 +29,7 @@ export default function PostSchoolSection() {
 
   const ravenMonthlyNet = netMonthlyRaven(role.hourly);
   const lastYD = YEAR_DATA[YEAR_DATA.length - 1];
-  const ryanMonthlyNet = netMonthly(RYAN_RATE[lastYD.year]);
+  const ryanMonthlyNet = lastYD.ryanPayConfig.monthlyNet;
   const bizIncome = lastYD.months[0].bizIncome;
   const combinedIncome = ryanMonthlyNet + ravenMonthlyNet + bizIncome;
 

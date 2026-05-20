@@ -105,6 +105,14 @@ export const MONTHS_SHORT = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
+export function grossMonthly(hourlyRate: number): number {
+  return HRS_MO * hourlyRate;
+}
+
+export function netMonthly(hourlyRate: number): number {
+  return HRS_MO * hourlyRate * (1 - TAX_RATE);
+}
+
 export function ravenNetMonthly(year: number): number {
   const rate = RAVEN_RATE[year];
   if (!rate) return 0;
